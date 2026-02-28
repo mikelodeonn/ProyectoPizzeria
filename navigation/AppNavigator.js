@@ -1,0 +1,32 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import MainMenuScreen from "../screens/MainMenu";
+import EmployeeLoginScreen from "../screens/EmployeeLogin";
+import CustomerHomeScreen from "../screens/CustomerHome";
+
+const Stack = createNativeStackNavigator();
+
+export default function AppNavigator() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="MainMenu"
+          component={MainMenuScreen}
+          options={{ title: "Inicio" }}
+        />
+        <Stack.Screen
+          name="CustomerHome"
+          component={CustomerHomeScreen}
+          options={{ title: "Cliente" }}
+        />
+        <Stack.Screen
+          name="EmployeeLogin"
+          component={EmployeeLoginScreen}
+          options={{ title: "Empleado" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
