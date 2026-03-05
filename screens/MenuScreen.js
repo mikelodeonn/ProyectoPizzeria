@@ -61,14 +61,6 @@ export default function MenuScreen({ navigation }) {
 
         </ScrollView>
 
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={20} color={COLORS.white} />
-          <Text style={styles.backText}>Volver</Text>
-        </TouchableOpacity>
-
       </View>
     </ImageBackground>
   );

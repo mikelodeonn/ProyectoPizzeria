@@ -24,31 +24,32 @@ export default function AppNavigator() {
         <Stack.Screen
           name="MainMenu"
           component={MainMenuScreen}
-          options={{ title: "Inicio" }}
+          options={{headerShown:false }}
         />
         <Stack.Screen
           name="CustomerHome"
           component={CustomerHome}
-          options={{ title: "Cliente" }}
+          options={{headerShown:false }}
         />
         <Stack.Screen
           name="EmployeeHome"
           component={EmployeeHome}
-          options={{ title: "Empleado" }}
+          options={{headerShown:false }}
         />
         <Stack.Screen
           name="Order" 
           component={OrderScreen}
-          options={{title: "Ordenar"}}
+          options={{headerShown:false }}
         />
         <Stack.Screen
           name="Orders" 
           component={OrdersScreen}
-          options={{title: "Ordenes"}}
+          options={{headerShown:false }}
         /> 
         <Stack.Screen 
           name="Menu" 
           component={MenuScreen} 
+          options={{headerShown:false }}
           />       
       </Stack.Navigator>
     </NavigationContainer>
