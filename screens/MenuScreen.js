@@ -11,7 +11,7 @@ import {
 import { menu, sizes } from "../data/menuData";
 import { COLORS } from "../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
-
+import { CommonActions } from "@react-navigation/native";
 export default function MenuScreen({ navigation }) {
 
   const backgroundImage = require("../assets/images/pizza.png");

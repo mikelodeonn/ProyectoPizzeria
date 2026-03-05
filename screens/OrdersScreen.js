@@ -11,6 +11,7 @@ import {
 
 import { getOrders, deleteOrder } from "../utils/storage";
 import { COLORS } from "../theme/colors";
+import { CommonActions } from "@react-navigation/native";
 
 export default function OrdersScreen({ navigation }) {
 
@@ -46,7 +47,7 @@ export default function OrdersScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={require("../assets/images/pizza.png")}
+      source={require("../assets/images/pizza2.jpg")}
       style={styles.background}
       resizeMode="cover"
     >

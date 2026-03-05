@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../theme/colors";
+import { CommonActions } from "@react-navigation/native";
 
 export default function MainMenuScreen({ navigation }) {
 

@@ -13,6 +13,7 @@ import { saveOrder } from "../utils/storage";
 import { COLORS } from "../theme/colors";
 import { Picker } from "@react-native-picker/picker";
 import { menu, sizes } from "../data/menuData";
+import { CommonActions } from "@react-navigation/native";
 
 export default function OrderScreen({ navigation }) {
 
@@ -20,9 +21,19 @@ export default function OrderScreen({ navigation }) {
   const [size, setSize] = useState(sizes[0].name);
   const [quantity, setQuantity] = useState("1");
 
+  const handleExit = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      })
+    );
+  };
+
   const handleCreateOrder = async () => {
 
     const qty = parseInt(quantity);
+
 
     if (isNaN(qty) || qty <= 0) {
       Alert.alert("Error", "La cantidad debe ser mayor que 0");
@@ -55,7 +66,7 @@ export default function OrderScreen({ navigation }) {
 
     Alert.alert("Éxito", "Orden creada correctamente");
 
-    navigation.replace("EmployeeHome");
+    navigation.replace("MainMenu");
   };
 
   return (
@@ -137,7 +148,7 @@ export default function OrderScreen({ navigation }) {
 
           <TouchableOpacity
             style={styles.exitButton}
-            onPress={() => navigation.replace("Login")}
+            onPress={handleExit}
           >
             <Text style={styles.exitText}>EXIT</Text>
           </TouchableOpacity>
