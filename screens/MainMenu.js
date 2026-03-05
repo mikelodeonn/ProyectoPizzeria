@@ -14,6 +14,16 @@ export default function MainMenuScreen({ navigation }) {
 
   const backgroundImage = require("../assets/images/pizza2.jpg");
 
+  const handleExit = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      })
+    );
+  };
+
+
   return (
     <ImageBackground
       source={backgroundImage}
@@ -21,7 +31,7 @@ export default function MainMenuScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        
+
         <ScrollView contentContainerStyle={styles.container}>
 
           <View style={styles.card}>
@@ -38,7 +48,7 @@ export default function MainMenuScreen({ navigation }) {
               <Text style={styles.buttonText}>Empleado</Text>
             </TouchableOpacity>
 
-            
+
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("CustomerHome")}
@@ -47,10 +57,10 @@ export default function MainMenuScreen({ navigation }) {
               <Text style={styles.buttonText}>Cliente</Text>
             </TouchableOpacity>
 
-         
+
             <TouchableOpacity
               style={styles.exitButton}
-              onPress={() => navigation.replace("Login")}
+              onPress={handleExit}
             >
               <Ionicons name="exit-outline" size={22} color={COLORS.white} />
               <Text style={styles.exitText}>EXIT</Text>

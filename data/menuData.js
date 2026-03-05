@@ -3,30 +3,24 @@ export const menu = [
     id: "1",
     name: "Pepperoni",
     image: require("../assets/images/type1.png"),
-    prices: {
-      small: 80,
-      medium: 120,
-      large: 160,
-    },
+    basePrice: 100
   },
   {
     id: "2",
     name: "Hawaiana",
     image: require("../assets/images/type2.png"),
-    prices: {
-      small: 85,
-      medium: 125,
-      large: 165,
-    },
+    basePrice: 95
   },
   {
     id: "3",
     name: "Vegetariana",
     image: require("../assets/images/type3.png"),
-    prices: {
-      small: 75,
-      medium: 115,
-      large: 150,
-    },
-  },
+    basePrice: 90
+  }
+];
+
+export const sizes = [
+  { name: "Chica", multiplier: 1 },
+  { name: "Mediana", multiplier: 1.3 },
+  { name: "Grande", multiplier: 1.6 }
 ];

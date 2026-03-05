@@ -22,10 +22,14 @@ export const saveOrder = async (order) => {
   }
 };
 
-export const clearOrders = async () => {
+export const deleteOrder = async (id) => {
   try {
-    await AsyncStorage.removeItem(STORAGE_KEY);
+    const orders = await getOrders();
+
+    const filteredOrders = orders.filter((order) => order.id !== id);
+
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(filteredOrders));
   } catch (error) {
-    console.log("Error clearing orders:", error);
+    console.log("Error eliminando orden", error);
   }
 };

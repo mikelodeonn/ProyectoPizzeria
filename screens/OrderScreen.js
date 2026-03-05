@@ -10,23 +10,44 @@ import {
 } from "react-native";
 
 import { saveOrder } from "../utils/storage";
+import { COLORS } from "../theme/colors";
+import { Picker } from "@react-native-picker/picker";
+import { menu, sizes } from "../data/menuData";
 
 export default function OrderScreen({ navigation }) {
 
-  const [pizza, setPizza] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [pizza, setPizza] = useState(menu[0].id);
+  const [size, setSize] = useState(sizes[0].name);
+  const [quantity, setQuantity] = useState("1");
 
   const handleCreateOrder = async () => {
 
-    if (!pizza.trim() || !quantity) {
-      Alert.alert("Error", "Completa todos los campos");
+    const qty = parseInt(quantity);
+
+    if (isNaN(qty) || qty <= 0) {
+      Alert.alert("Error", "La cantidad debe ser mayor que 0");
       return;
     }
 
+    if (qty > 10) {
+      Alert.alert("Error", "Máximo 10 pizzas por orden");
+      return;
+    }
+
+    const selectedPizza = menu.find(p => p.id === pizza);
+    const selectedSize = sizes.find(s => s.name === size);
+
+    const price =
+      selectedPizza.basePrice *
+      selectedSize.multiplier *
+      qty;
+
     const newOrder = {
       id: Date.now().toString(),
-      pizza: pizza.trim(),
-      quantity: parseInt(quantity),
+      pizza: selectedPizza.name,
+      size: selectedSize.name,
+      quantity: qty,
+      price: price,
       date: new Date().toLocaleString()
     };
 
@@ -34,39 +55,78 @@ export default function OrderScreen({ navigation }) {
 
     Alert.alert("Éxito", "Orden creada correctamente");
 
-    setPizza("");
-    setQuantity("");
-
-    navigation.navigate("Orders");
+    navigation.replace("EmployeeHome");
   };
 
   return (
     <ImageBackground
       source={require("../assets/images/pizza.png")}
       style={styles.background}
+      resizeMode="cover"
     >
       <View style={styles.overlay}>
 
         <View style={styles.card}>
 
-          <Text style={styles.title}>Crear Orden 🍕</Text>
+          <Text style={styles.title}>Crear Orden</Text>
+          <Text style={styles.subtitle}>Selecciona tu pizza</Text>
+
+          {/* PIZZA */}
+
+          <Text style={styles.label}>Tipo de Pizza</Text>
+
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={pizza}
+              onValueChange={(itemValue) => setPizza(itemValue)}
+              dropdownIconColor="white"
+              style={styles.picker}
+            >
+              {menu.map((item) => (
+                <Picker.Item
+                  key={item.id}
+                  label={item.name}
+                  value={item.id}
+                />
+              ))}
+            </Picker>
+          </View>
+
+          {/* SIZE */}
+
+          <Text style={styles.label}>Tamaño</Text>
+
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={size}
+              onValueChange={(itemValue) => setSize(itemValue)}
+              dropdownIconColor="white"
+              style={styles.picker}
+            >
+              {sizes.map((item, index) => (
+                <Picker.Item
+                  key={index}
+                  label={item.name}
+                  value={item.name}
+                />
+              ))}
+            </Picker>
+          </View>
+
+          {/* QUANTITY */}
+
+          <Text style={styles.label}>Cantidad</Text>
 
           <TextInput
             style={styles.input}
-            placeholder="Nombre de la pizza"
-            placeholderTextColor="#aaa"
-            value={pizza}
-            onChangeText={setPizza}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Cantidad"
+            placeholder="Ej: 2"
             placeholderTextColor="#aaa"
             value={quantity}
             onChangeText={setQuantity}
             keyboardType="numeric"
           />
+
+          {/* BUTTON */}
 
           <TouchableOpacity
             style={styles.button}
@@ -91,60 +151,86 @@ export default function OrderScreen({ navigation }) {
 
 const styles = StyleSheet.create({
 
-  background:{flex:1},
-
-  overlay:{
-    flex:1,
-    backgroundColor:"rgba(0,0,0,0.6)",
-    justifyContent:"center",
-    alignItems:"center",
-    padding:20
+  background: {
+    flex: 1
   },
 
-  card:{
-    width:"100%",
-    backgroundColor:"rgba(255,255,255,0.08)",
-    padding:25,
-    borderRadius:18,
-    borderWidth:1,
-    borderColor:"rgba(255,255,255,0.15)"
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20
   },
 
-  title:{
-    fontSize:22,
-    fontWeight:"bold",
-    color:"white",
-    marginBottom:20
+  card: {
+    width: "100%",
+    backgroundColor: "rgba(11,69,77,0.65)",
+    padding: 25,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)"
   },
 
-  input:{
-    backgroundColor:"rgba(255,255,255,0.1)",
-    padding:12,
-    borderRadius:10,
-    marginBottom:15,
-    color:"white"
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: COLORS.white,
+    marginBottom: 6
   },
 
-  button:{
-    backgroundColor:"#3DB296",
-    padding:15,
-    borderRadius:10,
-    alignItems:"center"
+  subtitle: {
+    color: "#ddd",
+    marginBottom: 20
   },
 
-  buttonText:{
-    color:"white",
-    fontWeight:"bold"
+  label: {
+    color: COLORS.white,
+    marginBottom: 5,
+    fontWeight: "600"
   },
 
-  exitButton:{
-    marginTop:20,
-    alignItems:"center"
+  pickerContainer: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+    borderRadius: 12,
+    marginBottom: 15
   },
 
-  exitText:{
-    color:"#E4523B",
-    fontWeight:"bold"
+  picker: {
+    color: "white"
+  },
+
+  input: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 15,
+    color: "white",
+    fontSize: 16
+  },
+
+  button: {
+    backgroundColor: COLORS.secondary,
+    padding: 16,
+    borderRadius: 14,
+    alignItems: "center",
+    marginTop: 10
+  },
+
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+
+  exitButton: {
+    marginTop: 20,
+    alignItems: "center"
+  },
+
+  exitText: {
+    color: COLORS.primary,
+    fontWeight: "bold"
   }
 
 });

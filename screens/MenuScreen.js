@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { menu } from "../data/menuData";
+import { menu, sizes } from "../data/menuData";
 import { COLORS } from "../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -38,20 +38,20 @@ export default function MenuScreen({ navigation }) {
 
                 <Text style={styles.pizzaName}>{pizza.name}</Text>
 
-                <View style={styles.priceRow}>
-                  <Text style={styles.size}>Chica</Text>
-                  <Text style={styles.price}>${pizza.prices.small}</Text>
-                </View>
+                {sizes.map((size) => {
 
-                <View style={styles.priceRow}>
-                  <Text style={styles.size}>Mediana</Text>
-                  <Text style={styles.price}>${pizza.prices.medium}</Text>
-                </View>
+                  const price = Math.round(
+                    pizza.basePrice * size.multiplier
+                  );
 
-                <View style={styles.priceRow}>
-                  <Text style={styles.size}>Grande</Text>
-                  <Text style={styles.price}>${pizza.prices.large}</Text>
-                </View>
+                  return (
+                    <View key={size.name} style={styles.priceRow}>
+                      <Text style={styles.size}>{size.name}</Text>
+                      <Text style={styles.price}>${price}</Text>
+                    </View>
+                  );
+
+                })}
 
               </View>
 
@@ -155,4 +155,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+
 });
