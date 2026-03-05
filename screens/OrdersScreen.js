@@ -1,91 +1,105 @@
 import React, { useEffect, useState } from "react";
 import {
-    View,
-    Text,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ImageBackground
 } from "react-native";
-import { getOrders, clearOrders } from "../storage/storage";
 
+import { getOrders } from "../utils/storage";
 
 export default function OrdersScreen({ navigation }) {
-    const [orders, setOrders] = useState([]);
 
-    useEffect(() => {
-        const loadOrders = async () => {
-            const storedOrders = await getOrders();
-            setOrders(storedOrders);
-        };
+  const [orders, setOrders] = useState([]);
 
-        const unsubscribe = navigation.addListener("focus", loadOrders);
+  const loadOrders = async () => {
+    const data = await getOrders();
+    setOrders(data);
+  };
 
-        return unsubscribe;
-    }, [navigation]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", loadOrders);
+    return unsubscribe;
+  }, [navigation]);
 
-    const renderItem = ({ item }) => (
-        <View style={styles.card}>
-            <Text style={styles.text}>Pizza: {item.pizza}</Text>
-            <Text style={styles.text}>Cantidad: {item.quantity}</Text>
-            <Text style={styles.date}>{item.date}</Text>
-        </View>
-    );
+  return (
+    <ImageBackground
+      source={require("../assets/images/pizza.png")}
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Historial de Órdenes 📋</Text>
+        <Text style={styles.title}>Órdenes</Text>
 
-            <FlatList
-                data={orders}
-                keyExtractor={(item) => item.id}
-                renderItem={renderItem}
-                ListEmptyComponent={
-                    <Text>No hay órdenes registradas</Text>
-                }
-            />
+        <FlatList
+          data={orders}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
 
-            <TouchableOpacity
-                style={styles.exitButton}
-                onPress={() => navigation.replace("Login")}
-            >
-                <Text style={styles.exitText}>EXIT</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={{ marginTop: 15, alignItems: "center" }}
-                onPress={async () => {
-                    await clearOrders();
-                    setOrders([]);
-                }}
-            >
-                <Text style={{ color: "red", fontWeight: "bold" }}>
-                    Borrar Órdenes (Prueba)
-                </Text>
-            </TouchableOpacity>
-        </View>
-    );
+            <View style={styles.card}>
+
+              <Text style={styles.pizza}>
+                {item.pizza}
+              </Text>
+
+              <Text style={styles.quantity}>
+                Cantidad: {item.quantity}
+              </Text>
+
+              <Text style={styles.date}>
+                {item.date}
+              </Text>
+
+            </View>
+
+          )}
+        />
+
+      </View>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20 },
-    title: {
-        fontSize: 22,
-        fontWeight: "bold",
-        marginBottom: 15,
-    },
-    card: {
-        backgroundColor: "#f2f2f2",
-        padding: 15,
-        borderRadius: 8,
-        marginBottom: 10,
-    },
-    text: { fontSize: 16 },
-    date: { fontSize: 12, color: "#666", marginTop: 5 },
-    exitButton: {
-        marginTop: 20,
-        alignItems: "center",
-    },
-    exitText: {
-        color: "red",
-        fontWeight: "bold",
-    },
+
+  background:{flex:1},
+
+  overlay:{
+    flex:1,
+    backgroundColor:"rgba(0,0,0,0.6)",
+    padding:20
+  },
+
+  title:{
+    fontSize:26,
+    color:"white",
+    fontWeight:"bold",
+    marginBottom:20
+  },
+
+  card:{
+    backgroundColor:"rgba(255,255,255,0.08)",
+    padding:18,
+    borderRadius:16,
+    marginBottom:15,
+    borderWidth:1,
+    borderColor:"rgba(255,255,255,0.1)"
+  },
+
+  pizza:{
+    fontSize:18,
+    fontWeight:"bold",
+    color:"white"
+  },
+
+  quantity:{
+    color:"rgba(255,255,255,0.8)"
+  },
+
+  date:{
+    marginTop:5,
+    color:"#EBC317"
+  }
+
 });

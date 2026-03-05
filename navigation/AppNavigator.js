@@ -3,8 +3,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainMenuScreen from "../screens/MainMenu";
-import EmployeeLoginScreen from "../screens/EmployeeLogin";
-import CustomerHomeScreen from "../screens/CustomerHome";
+import EmployeeHome from "../screens/EmployeeHome";
+import CustomerHome from "../screens/CustomerHome";
 import LoginScreen from "../screens/LoginScreen";
 import OrderScreen from "../screens/OrderScreen";
 import OrdersScreen from "../screens/OrdersScreen";
@@ -27,12 +27,12 @@ export default function AppNavigator() {
         />
         <Stack.Screen
           name="CustomerHome"
-          component={CustomerHomeScreen}
+          component={CustomerHome}
           options={{ title: "Cliente" }}
         />
         <Stack.Screen
-          name="EmployeeLogin"
-          component={EmployeeLoginScreen}
+          name="EmployeeHome"
+          component={EmployeeHome}
           options={{ title: "Empleado" }}
         />
         <Stack.Screen

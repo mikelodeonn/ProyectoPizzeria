@@ -9,8 +9,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../theme/colors";
+import { CommonActions } from "@react-navigation/native";
 
-export default function MainMenuScreen({ navigation }) {
+export default function EmployeeHome({ navigation }) {
+
+  const handleExit = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      })
+    );
+  };
 
   const backgroundImage = require("../assets/images/pizza2.jpg");
 
@@ -21,38 +31,35 @@ export default function MainMenuScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        
         <ScrollView contentContainerStyle={styles.container}>
 
           <View style={styles.card}>
 
-            <Text style={styles.title}>PizzApp</Text>
-            <Text style={styles.subtitle}>Selecciona tu modo</Text>
+            <Text style={styles.title}>Panel de Empleado</Text>
+            <Text style={styles.subtitle}>Gestiona las órdenes</Text>
 
-            {/* BOTON EMPLEADO */}
+            {/* CREAR ORDEN */}
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate("EmployeeHome")}
+              onPress={() => navigation.navigate("Order")}
             >
-              <Ionicons name="restaurant" size={24} color={COLORS.white} />
-              <Text style={styles.buttonText}>Empleado</Text>
+              <Ionicons name="add-circle" size={24} color={COLORS.white} />
+              <Text style={styles.buttonText}>Crear Orden</Text>
             </TouchableOpacity>
 
-            
+            {/* VER ORDENES */}
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate("CustomerHome")}
+              onPress={() => navigation.navigate("Orders")}
             >
-              <Ionicons name="person" size={24} color={COLORS.white} />
-              <Text style={styles.buttonText}>Cliente</Text>
+              <Ionicons name="receipt" size={24} color={COLORS.white} />
+              <Text style={styles.buttonText}>Ver Órdenes</Text>
             </TouchableOpacity>
 
-         
             <TouchableOpacity
               style={styles.exitButton}
-              onPress={() => navigation.replace("Login")}
+              onPress={handleExit}
             >
-              <Ionicons name="exit-outline" size={22} color={COLORS.white} />
               <Text style={styles.exitText}>EXIT</Text>
             </TouchableOpacity>
 
@@ -95,14 +102,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 38,
+    fontSize: 32,
     fontWeight: "bold",
     color: COLORS.white,
     textAlign: "center",
   },
 
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     color: COLORS.white,
     textAlign: "center",
     marginBottom: 30,
@@ -111,8 +118,8 @@ const styles = StyleSheet.create({
 
   button: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
 
     backgroundColor: COLORS.primary,
     paddingVertical: 16,
