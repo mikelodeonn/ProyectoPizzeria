@@ -10,9 +10,12 @@ import {
     Platform,
     ScrollView,
     Alert,
+    ImageBackground,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // paquete de iconos de Expo
 import { users } from "../data/usersData";
+import { COLORS } from "../theme/colors";
+
 
 const useForm = (initialValues, validate) => {
     const [values, setValues] = useState(initialValues);
@@ -58,6 +61,7 @@ const validateLogin = (values) => {
 };
 
 export default function LoginScreen({ navigation }) {
+    const backgroundImage = require("../assets/images/pizza.png");
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const {
@@ -83,79 +87,111 @@ export default function LoginScreen({ navigation }) {
     }, [username, password, navigation]);
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        <ImageBackground
+            source={backgroundImage}
+            style={styles.background}
+            resizeMode="cover"
         >
-            <ScrollView
-                contentContainerStyle={styles.scrollContent}
-                keyboardShouldPersistTaps="handled"
-            >
-                <View style={styles.header}>
-                    <Text style={styles.title}>Pizzería App</Text>
-                    <Text style={styles.subtitle}>
-                        Inicia sesión para continuar
-                    </Text>
-                </View>
-
-                <View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Usuario</Text>
-                        <TextInput
-                            style={[styles.input, errors.username && styles.inputError]}
-                            placeholder="Ingresa tu usuario"
-                            value={username}
-                            onChangeText={handleChange("username")}
-                            autoCapitalize="none"
-                        />
-                        {errors.username && (
-                            <Text style={styles.errorText}>{errors.username}</Text>
-                        )}
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Contraseña</Text>
-                        <TextInput
-                            style={[styles.input, errors.password && styles.inputError]}
-                            placeholder="Ingresa tu contraseña"
-                            value={password}
-                            onChangeText={handleChange("password")}
-                            secureTextEntry={!passwordVisible}
-                        />
-                        <TouchableOpacity
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        >
-                            <Ionicons
-                                name={passwordVisible ? "eye-off" : "eye"} // alterna entre iconos
-                                size={24}
-                                color="gray"
-                            />
-                        </TouchableOpacity>
-
-                        {errors.password && (
-                            <Text style={styles.errorText}>{errors.password}</Text>
-                        )}
-                    </View>
-
-                    <TouchableOpacity
-                        style={[styles.button, isSubmitting && styles.buttonDisabled]}
-                        onPress={() => handleSubmit(handleLogin)}
-                        disabled={isSubmitting}
+            <View style={styles.overlay}>
+                <KeyboardAvoidingView 
+                    style = {{flex: 1}}
+                    behavior= {Platform.OS === "ios" ? "padding" : "height"}
+                >
+                    <ScrollView
+                        contentContainerStyle={styles.scrollContent}
+                        keyboardShouldPersistTaps="handled"
                     >
-                        {isSubmitting ? (
-                            <ActivityIndicator color="#fff" />
-                        ) : (
-                            <Text style={styles.buttonText}>Ingresar</Text>
-                        )}
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                        <View style={styles.card}>
+                            <View style={styles.header}>
+                                <Text style={styles.title}>PizzApp</Text>
+
+                            </View>
+
+                            <View>
+                                <View style={styles.inputContainer}>
+                                    <Text style={styles.label}>Usuario</Text>
+                                    <TextInput
+                                        style={[styles.input, errors.username && styles.inputError]}
+                                        placeholder="Ingresa tu usuario"
+                                        value={username}
+                                        onChangeText={handleChange("username")}
+                                        autoCapitalize="none"
+                                    />
+                                    {errors.username && (
+                                        <Text style={styles.errorText}>{errors.username}</Text>
+                                    )}
+                                </View>
+
+                                <View style={styles.inputContainer}>
+                                    <Text style={styles.label}>Contraseña</Text>
+                                    <TextInput
+                                        style={[styles.input, errors.password && styles.inputError]}
+                                        placeholder="Ingresa tu contraseña"
+                                        value={password}
+                                        onChangeText={handleChange("password")}
+                                        secureTextEntry={!passwordVisible}
+                                    />
+                                    <TouchableOpacity
+                                        onPress={() => setPasswordVisible(!passwordVisible)}
+                                    >
+                                        <Ionicons
+                                            name={passwordVisible ? "eye-off" : "eye"} // alterna entre iconos
+                                            size={24}
+                                            color="gray"
+                                        />
+                                    </TouchableOpacity>
+
+                                    {errors.password && (
+                                        <Text style={styles.errorText}>{errors.password}</Text>
+                                    )}
+                                </View>
+
+                                <TouchableOpacity
+                                    style={[styles.button, isSubmitting && styles.buttonDisabled]}
+                                    onPress={() => handleSubmit(handleLogin)}
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? (
+                                        <ActivityIndicator color="#fff" />
+                                    ) : (
+                                        <Text style={styles.buttonText}>Ingresar</Text>
+                                    )}
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    
+    background: {
+        flex: 1,
+    },
+
+    overlay: {
+        flex: 1,
+        backgroundColor: "rgba(0, 0, 0, 0.6)", // 50% oscuro
+        padding: 20,
+    },
+    centerContainer: {
+        flex: 1,
+        justifyContent: "center",
+    },
+
+    card: {
+        backgroundColor: "rgba(11, 69, 77, 0.5)",
+        borderRadius: 20,
+        padding: 25,
+        shadowColor:"rgba(11, 69, 77, 0.5)",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 8,
+    },
+
     container: {
         flex: 1,
         backgroundColor: "#f5f5f5",
@@ -167,54 +203,65 @@ const styles = StyleSheet.create({
     },
     header: {
         alignItems: "center",
-        marginBottom: 40,
+        marginBottom: 30,
+        
+
     },
     title: {
-        fontSize: 30,
+        fontSize: 40,
         fontWeight: "bold",
-        color: "#333",
+        color: COLORS.white,
     },
     subtitle: {
-        fontSize: 16,
-        color: "#666",
+        fontSize: 18,
+        color: COLORS.white,
         marginTop: 8,
     },
     inputContainer: {
-        marginBottom: 20,
-        
+        marginBottom: 18,
+
     },
     label: {
         fontSize: 14,
+        color: COLORS.white,
         fontWeight: "600",
         marginBottom: 8,
     },
     input: {
         borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 8,
-        padding: 12,
-        backgroundColor: "#fff",
+        borderColor: "#eee",
+        borderRadius: 12,
+        padding: 14,
+        backgroundColor: "#fafafa",
+        fontSize: 16,
     },
     inputError: {
-        borderColor: "#e74c3c",
+        borderColor: COLORS.warning,
     },
     errorText: {
-        color: "#e74c3c",
+        color: COLORS.warning,
         fontSize: 12,
         marginTop: 4,
     },
     button: {
-        backgroundColor: "#d35400",
-        padding: 16,
-        borderRadius: 8,
+        backgroundColor: COLORS.warning,
+        paddingVertical: 16,
+        borderRadius: 14,
         alignItems: "center",
+        marginTop: 10,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 5,
     },
     buttonDisabled: {
-        backgroundColor: "#bdc3c7",
+        backgroundColor: "#363a3d",
     },
     buttonText: {
-        color: "#fff",
+        color: COLORS.white,
         fontSize: 18,
-        fontWeight: "600",
+        fontWeight: "bold",
+        letterSpacing: 1,
     },
 });
